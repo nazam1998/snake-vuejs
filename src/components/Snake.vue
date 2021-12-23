@@ -39,7 +39,7 @@ export default {
       }
     },
     move() {
-      console.log(this.body);
+      console.log(this.body[0]);
       this.body.forEach((elem) => {
         if (this.currentDirection == "ArrowRight") {
           let tempY = elem[0];

@@ -1,15 +1,18 @@
 <template>
   <div class="board">
     <Snake/>
+    <Food/>
   </div>
 </template>
 
 <script>
 import Snake from '@/components/Snake';
+import Food from '@/components/Food';
 export default {
   name: "Board",
   components: {
-    Snake
+    Snake,
+    Food,
   }
 };
 </script>
