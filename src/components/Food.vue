@@ -1,30 +1,16 @@
 <template>
   <div
     class="food"
-    :style="{ top: coord[0] + 'px', left: coord[1] + 'px' }"
+    :style="{ top: foodCoord[1] + '%', left: foodCoord[0] + '%' }"
   ></div>
 </template>
 <script>
 export default {
   name: "Food",
-  data() {
-    return {
-      coord: [],
-    };
+  props:{
+    foodCoord: Array
   },
-  mounted() {
-    this.getRandCoord();
-  },
-  methods: {
-    getRandCoord() {
-      this.coord = [];
-      let num1 = Math.floor(Math.random() * 560);
-      let num2 = Math.floor(Math.random() * 560);
-      this.coord.push(num1, num2);
-      console.log(this.coord);
-    },
-  },
-};
+}
 </script>
 <style scoped>
 .food {
