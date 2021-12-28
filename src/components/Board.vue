@@ -1,7 +1,10 @@
 <template>
-  <div class="board">
-    <Snake v-for="(elem, index) in snakeBody" :key="index" :snakeDot="elem" />
-    <Food :foodCoord="foodCoord" />
+  <div>
+    <h3>Score: {{ scores }}</h3>
+    <div class="board">
+      <Snake v-for="(elem, index) in snakeBody" :key="index" :snakeDot="elem" />
+      <Food :foodCoord="foodCoord" />
+    </div>
   </div>
 </template>
 
@@ -82,9 +85,9 @@ export default {
     checkIfEat: function () {
       let dots = [...this.snakeBody];
       let head = dots[dots.length - 1];
-        console.log(head[0],this.foodCoord[0], head[0] == this.foodCoord[0])
+      console.log(head[0], this.foodCoord[0], head[0] == this.foodCoord[0]);
       if (head[0] == this.foodCoord[0] && head[1] == this.foodCoord[1]) {
-        console.log("has eaten")
+        console.log("has eaten");
         this.getRandCoord();
         this.enlargeSnake();
         this.increaseSpeed();
@@ -101,7 +104,7 @@ export default {
       }
     },
     onGameOver: function () {
-      alert("Game Over. Snake length is " + this.snakeBody.length);
+      alert("Game Over. Your Score is " + this.scores);
       this.setInitial();
     },
     move() {
@@ -121,6 +124,11 @@ export default {
       dots.push(head);
       dots.shift();
       this.snakeBody = [...dots];
+    },
+  },
+  computed: {
+    scores: function () {
+      return this.snakeBody.length - 2;
     },
   },
 };
