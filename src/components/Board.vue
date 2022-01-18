@@ -1,7 +1,11 @@
 <template>
   <div>
-    <h3>Score: {{ scores }}</h3>
-    <div class="board">
+    <h4 v-if="msg">{{msg}}</h4>
+    <h3 v-else>Score: {{ scores }}</h3>
+    <div v-if="!isPlaying">
+      <button class="btn btn-primary" @click="play">Play</button>
+    </div>
+    <div class="board" v-else>
       <Snake v-for="(elem, index) in snakeBody" :key="index" :snakeDot="elem" />
       <Food :foodCoord="foodCoord" />
     </div>
@@ -23,9 +27,11 @@ export default {
         [0, 0],
         [2, 0],
       ],
-      speed: 500,
+      speed: 300,
       currentDirection: "ArrowRight",
       foodCoord: [],
+      isPlaying: false,
+      msg: null
     };
   },
   mounted() {
@@ -36,11 +42,20 @@ export default {
     setInterval(this.move, this.speed);
   },
   updated() {
-    this.checkifOutOfBounds();
-    this.checkIfCollapsed();
-    this.checkIfEat();
+    if (this.isPlaying) {
+      this.checkifOutOfBounds();
+      this.checkIfCollapsed();
+      this.checkIfEat();
+    }
   },
   methods: {
+    play: function () {
+      this.isPlaying = !this.isPlaying;
+      if (this.isPlaying) {
+        this.setInitial();
+        this.msg = null;
+      }
+    },
     setDirection: function (event) {
       if (
         event.key == "ArrowRight" ||
@@ -53,8 +68,8 @@ export default {
     },
     getRandCoord: function () {
       this.foodCoord = [];
-      let num1 = Math.floor(Math.random() * 100);
-      let num2 = Math.floor(Math.random() * 100);
+      let num1 = Math.floor(Math.random() * 50) * 2;
+      let num2 = Math.floor(Math.random() * 50) * 2;
       this.foodCoord.push(num1, num2);
     },
     setInitial: function () {
@@ -62,7 +77,7 @@ export default {
         [0, 0],
         [2, 0],
       ];
-      this.speed = 500;
+      this.speed = 300;
       this.currentDirection = "ArrowRight";
     },
     checkifOutOfBounds: function () {
@@ -85,9 +100,7 @@ export default {
     checkIfEat: function () {
       let dots = [...this.snakeBody];
       let head = dots[dots.length - 1];
-      console.log(head[0], this.foodCoord[0], head[0] == this.foodCoord[0]);
       if (head[0] == this.foodCoord[0] && head[1] == this.foodCoord[1]) {
-        console.log("has eaten");
         this.getRandCoord();
         this.enlargeSnake();
         this.increaseSpeed();
@@ -104,13 +117,13 @@ export default {
       }
     },
     onGameOver: function () {
-      alert("Game Over. Your Score is " + this.scores);
+      this.msg = "Game Over. Your Score is " + this.scores;
       this.setInitial();
+      this.play();
     },
     move() {
       let dots = [...this.snakeBody];
       let head = dots[dots.length - 1];
-      console.log(this.currentDirection);
       if (this.currentDirection == "ArrowRight") {
         head = [head[0] + 2, head[1]];
       } else if (this.currentDirection == "ArrowLeft") {
@@ -141,6 +154,7 @@ export default {
   height: 600px;
   width: 600px;
   background: #000;
-  margin: 20px auto;
+  margin: 0 auto;
+  margin-bottom: 10px;
 }
 </style>
